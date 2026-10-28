@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NuVision — Software for Real Businesses</title>
+<meta name="description" content="NuVision builds POS systems, QR digital menus, business websites, CV designs and custom software — in Kurdish, Arabic and English.">
+<meta name="theme-color" content="#050f0a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="NuVision — Software for Real Businesses">
+<meta property="og:description" content="POS systems, QR menus, websites and custom software — in Kurdish, Arabic and English.">
+<meta property="og:image" content="assets/projects/salesos-dashboard-desktop.webp">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23050f0a'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%233fd582'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#050f0a; --bg-2:#0a1710; --bg-3:#0d1a12;
+  --text:#eafaf1; --muted:#93a89c; --dim:#6b8577; --faint:#546156;
+  --green:#3fd582; --green-2:#22b866; --green-3:#1fae63; --green-4:#7ee787;
+  --line:rgba(255,255,255,.08); --line-green:rgba(63,213,130,.3);
+  --font:'Plus Jakarta Sans',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+html.lang-ku{ --font:'Noto Sans Arabic','Plus Jakarta Sans',sans-serif; }
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth; scroll-padding-top:80px;}
+body{font-family:var(--font); background:var(--bg); color:var(--text); overflow-x:hidden; line-height:1.55;}
+a{color:inherit; text-decoration:none;}
+button,input,select,textarea{font-family:inherit; font-size:inherit; color:inherit;}
+img{display:block; max-width:100%;}
+:focus-visible{outline:2px solid var(--green); outline-offset:3px; border-radius:6px;}
+
+/* ── animated background ── */
+#netbg{position:fixed; inset:0; z-index:0;}
+.grid-overlay{position:fixed; inset:0; z-index:0; opacity:.4; pointer-events:none;
+  background-image:linear-gradient(rgba(63,213,130,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(63,213,130,.06) 1px,transparent 1px);
+  background-size:40px 40px; animation:gridmove 30s linear infinite;}
+@keyframes gridmove{0%{background-position:0 0,0 0;} 100%{background-position:400px 400px,400px 400px;}}
+.blob{position:fixed; border-radius:50%; filter:blur(90px); pointer-events:none; opacity:.5; z-index:0;}
+.b1{width:600px;height:600px; background:radial-gradient(circle,#3fd582,transparent 70%); top:-180px; left:-140px; animation:mv1 11s ease-in-out infinite;}
+.b2{width:520px;height:520px; background:radial-gradient(circle,#1fae63,transparent 70%); bottom:-120px; right:-120px; animation:mv2 13s ease-in-out infinite;}
+.b3{width:440px;height:440px; background:radial-gradient(circle,#7ee787,transparent 70%); top:35%; left:55%; animation:mv3 15s ease-in-out infinite;}
+@keyframes mv1{0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(120px,90px) scale(1.15)}}
+@keyframes mv2{0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-110px,-80px) scale(1.2)}}
+@keyframes mv3{0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-90px,110px) scale(0.85)}}
+@media (prefers-reduced-motion: reduce){ .blob,.grid-overlay,.marquee-track,.brand .dot{animation:none;} html{scroll-behavior:auto;} }
+
+/* ── layout ── */
+.wrap{position:relative; z-index:2; max-width:1140px; margin:0 auto; padding:0 24px;}
+section{padding:80px 0; position:relative;}
+.sechead{text-align:center; max-width:640px; margin:0 auto 48px;}
+.sechead .kicker{display:inline-block; font-family:var(--mono); font-size:12px; color:var(--green); letter-spacing:.08em; text-transform:uppercase; margin-bottom:10px;}
+.sechead h2{font-size:clamp(1.6rem,3.6vw,2.4rem); font-weight:800; margin-bottom:12px; letter-spacing:-.01em; line-height:1.2;}
+.sechead p{color:var(--muted); font-size:1rem;}
+
+/* ── nav ── */
+header{position:sticky; top:0; z-index:1001; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:rgba(5,15,10,.72); border-bottom:1px solid transparent; transition:border-color .3s;}
+header.scrolled{border-bottom-color:var(--line);}
+nav{display:flex; align-items:center; justify-content:space-between; gap:16px; height:68px;}
+.brand{display:flex; align-items:center; gap:10px; font-weight:800; font-size:18px;}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--green); box-shadow:0 0 12px var(--green); animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1} 50%{opacity:.4}}
+.navlinks{display:flex; align-items:center; gap:28px; font-size:14px; color:var(--muted); font-weight:600;}
+.navlinks a:hover{color:var(--green);}
+.nav-cta{padding:9px 18px; border-radius:30px; background:rgba(63,213,130,.12); border:1px solid var(--line-green); color:var(--green)!important;}
+.nav-cta:hover{background:rgba(63,213,130,.2);}
+.lang-toggle{display:none; gap:2px; padding:3px; border:1px solid var(--line); border-radius:20px; font-family:var(--mono); font-size:12px;}
+.lang-toggle.ready{display:inline-flex;}
+.lang-toggle button{background:none; border:0; padding:4px 10px; border-radius:16px; cursor:pointer; color:var(--muted); font-weight:600;}
+.lang-toggle button[aria-pressed="true"]{background:var(--green); color:#04160c;}
+
+.burger{display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:10px; margin-inline-end:-10px;}
+.burger span{width:22px; height:2px; background:var(--text); border-radius:2px; transition:.25s;}
+.burger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.burger.open span:nth-child(2){opacity:0;}
+.burger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+.mobile-panel{display:none; position:fixed; inset:68px 0 0 0; z-index:1000; background:var(--bg); flex-direction:column; align-items:center; justify-content:center; gap:1.6rem;}
+.mobile-panel.open{display:flex;}
+.mobile-panel a{font-size:1.4rem; font-weight:700; color:var(--muted);}
+.mobile-panel a:hover{color:var(--green);}
+
+/* ── buttons & cards ── */
+.btn{padding:14px 26px; border-radius:30px; font-weight:700; font-size:15px; display:inline-flex; align-items:center; justify-content:center; gap:9px; transition:.25s; cursor:pointer; border:0; min-height:48px;}
+.btn-fill{background:linear-gradient(135deg,var(--green),var(--green-2)); color:#04160c; box-shadow:0 10px 30px rgba(63,213,130,.35);}
+.btn-fill:hover{transform:translateY(-3px); box-shadow:0 16px 40px rgba(63,213,130,.5);}
+.btn-outline{border:1px solid rgba(255,255,255,.15); color:var(--text); background:transparent;}
+.btn-outline:hover{border-color:var(--green); color:var(--green); transform:translateY(-3px);}
+.card{background:rgba(255,255,255,.03); border:1px solid var(--line); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-radius:18px; transition:border-color .3s, transform .3s;}
+.card.lift:hover{border-color:rgba(63,213,130,.4); transform:translateY(-6px);}
+
+/* ── hero ── */
+.hero{min-height:calc(88vh - 68px); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:56px 0 64px;}
+.eyebrow{display:inline-flex; align-items:center; gap:8px; background:rgba(63,213,130,.1); border:1px solid var(--line-green); color:var(--green); font-size:13px; font-weight:600; padding:8px 16px; border-radius:20px; margin-bottom:24px; font-family:var(--mono);}
+.eyebrow i{font-size:6px;}
+.hero h1{font-size:clamp(2.1rem,6vw,4rem); font-weight:800; line-height:1.12; margin-bottom:20px; letter-spacing:-.02em; max-width:820px;}
+.hero h1 span{background:linear-gradient(135deg,var(--green),var(--green-4)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+.hero p{color:var(--muted); font-size:1.08rem; max-width:560px; margin:0 auto 32px;}
+.actions{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:44px;}
+.marquee{overflow:hidden; width:100%; max-width:620px; -webkit-mask:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent); mask:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);}
+.marquee-track{display:flex; gap:36px; width:max-content; animation:scrollmq 22s linear infinite;}
+.marquee-track span{font-family:var(--mono); font-size:13px; color:var(--dim); white-space:nowrap; display:flex; align-items:center; gap:8px;}
+.marquee-track span i{color:var(--green);}
+@keyframes scrollmq{0%{transform:translateX(0);} 100%{transform:translateX(-50%);}}
+[dir="rtl"] .marquee-track{animation-name:scrollmq-rtl;}
+@keyframes scrollmq-rtl{0%{transform:translateX(0);} 100%{transform:translateX(50%);}}
+
+/* ── stats strip ── */
+.stats{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; padding:0;}
+.stat{padding:22px 24px; display:flex; align-items:center; gap:16px;}
+.stat b{font-size:1.9rem; font-weight:800; color:var(--green); line-height:1; font-family:var(--mono);}
+.stat span{color:var(--muted); font-size:.9rem; line-height:1.35;}
+
+/* ── services ── */
+.services{display:grid; grid-template-columns:repeat(6,1fr); gap:16px;}
+.service{padding:28px 24px; grid-column:span 2;}
+.service:nth-child(4),.service:nth-child(5){grid-column:span 3;}
+.service .ico{width:50px;height:50px;border-radius:13px;background:rgba(63,213,130,.12);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px;}
+.service h3{font-size:1.1rem; font-weight:800; margin-bottom:8px;}
+.service p{color:var(--muted); font-size:.9rem;}
+
+/* ── products ── */
+.products{display:flex; flex-direction:column; gap:28px;}
+.product{display:grid; grid-template-columns:1.3fr 1fr; overflow:hidden;}
+.product > *{min-width:0;}
+.product:nth-child(even) .gallery{order:2;}
+.gallery{padding:18px; display:flex; flex-direction:column; gap:12px; background:rgba(0,0,0,.18); border-inline-end:1px solid var(--line);}
+.product:nth-child(even) .gallery{border-inline-end:0; border-inline-start:1px solid var(--line);}
+.stage{position:relative; aspect-ratio:16/10; border-radius:12px; overflow:hidden; background:var(--bg-2); border:1px solid rgba(63,213,130,.15); cursor:zoom-in;}
+.stage .topbar{display:flex; align-items:center; gap:6px; height:30px; padding:0 12px; background:var(--bg-3); position:relative; z-index:1;}
+.stage .topbar span{width:8px;height:8px;border-radius:50%; flex-shrink:0;}
+.stage .topbar span:nth-child(1){background:#f47067;}
+.stage .topbar span:nth-child(2){background:#e3b341;}
+.stage .topbar span:nth-child(3){background:var(--green);}
+.stage .url{margin-inline-start:6px; font-family:var(--mono); font-size:10px; color:var(--faint); background:var(--bg); padding:3px 10px; border-radius:5px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; direction:ltr; text-align:start;}
+.stage .view{position:absolute; inset:30px 0 0 0;}
+.stage .view img{width:100%; height:100%; object-fit:cover; object-position:top center;}
+.stage.is-mobile .topbar{display:none;}
+.stage.is-mobile .view{inset:0; display:flex; align-items:center; justify-content:center; padding:14px; background:radial-gradient(circle at 50% 40%,rgba(63,213,130,.14),transparent 65%);}
+.stage.is-mobile .view img{width:auto; height:100%; aspect-ratio:390/844; border-radius:22px; border:5px solid #1b2a21; box-shadow:0 18px 40px rgba(0,0,0,.5);}
+.stage .zoom{position:absolute; inset-inline-end:10px; bottom:10px; width:34px; height:34px; border-radius:50%; background:rgba(5,15,10,.8); border:1px solid var(--line-green); color:var(--green); display:flex; align-items:center; justify-content:center; font-size:13px; pointer-events:none;}
+.stage.empty{cursor:default;}
+.stage .placeholder{position:absolute; inset:30px 0 0 0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; color:var(--green); font-family:var(--mono); font-size:12px; opacity:.75; text-align:center; padding:20px;}
+.stage .placeholder i{font-size:30px;}
+.thumbs{display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;}
+.thumbs::-webkit-scrollbar{display:none;}
+.thumb{flex:0 0 auto; display:flex; align-items:center; gap:6px; padding:7px 12px; border-radius:20px; border:1px solid var(--line); background:transparent; color:var(--muted); font-size:12px; font-weight:600; cursor:pointer; transition:.2s; white-space:nowrap; min-height:36px;}
+.thumb i{font-size:11px;}
+.thumb:hover{color:var(--text); border-color:rgba(255,255,255,.2);}
+.thumb[aria-pressed="true"]{color:var(--green); border-color:var(--line-green); background:rgba(63,213,130,.08);}
+.pbody{padding:30px 30px 28px; display:flex; flex-direction:column;}
+.ptype{font-family:var(--mono); font-size:11.5px; color:var(--green); letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px;}
+.pbody h3{font-size:1.45rem; font-weight:800; margin-bottom:10px; line-height:1.25;}
+.pbody > p{color:var(--muted); font-size:.93rem; margin-bottom:18px;}
+.features{list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:9px 16px; margin-bottom:22px;}
+.features li{display:flex; align-items:flex-start; gap:9px; font-size:.86rem; color:#c9dcd1; line-height:1.4;}
+.features li i{color:var(--green); font-size:12px; margin-top:4px;}
+.tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:auto;}
+.tags span{font-family:var(--mono); font-size:11px; color:var(--dim); border:1px solid rgba(255,255,255,.1); padding:3px 9px; border-radius:5px;}
+
+/* ── more projects ── */
+.more{margin-top:48px;}
+.more > h3{font-size:1.3rem; font-weight:800; margin-bottom:6px;}
+.more > p{color:var(--muted); font-size:.95rem; margin-bottom:20px;}
+.more-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+.mini{padding:20px; display:flex; flex-direction:column; gap:14px;}
+.mini .ico{width:42px; height:42px; border-radius:11px; background:rgba(63,213,130,.12); color:var(--green); display:flex; align-items:center; justify-content:center; font-size:17px;}
+.mini h4{font-size:1rem; font-weight:800; margin-bottom:6px;}
+.mini p{color:var(--muted); font-size:.86rem; margin-bottom:10px;}
+@media(max-width:980px){ .more-grid{grid-template-columns:1fr 1fr;} }
+@media(max-width:600px){ .more-grid{grid-template-columns:1fr;} .mini{flex-direction:row; align-items:flex-start;} .mini .ico{flex-shrink:0;} }
+
+/* ── process ── */
+.steps{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; counter-reset:step;}
+.step{padding:26px 22px; position:relative;}
+.step::before{counter-increment:step; content:"0" counter(step); font-family:var(--mono); font-size:13px; color:var(--green); display:block; margin-bottom:14px;}
+.step h3{font-size:1.05rem; font-weight:800; margin-bottom:8px;}
+.step p{color:var(--muted); font-size:.88rem;}
+
+/* ── CTA panel ── */
+.glowpanel{background:linear-gradient(135deg,var(--green-3),#0d7a44); border-radius:20px; padding:44px; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;}
+.glowpanel::after{content:''; position:absolute; top:-60px; inset-inline-end:-60px; width:200px; height:200px; background:rgba(255,255,255,.12); border-radius:50%; pointer-events:none;}
+.glowpanel h3{font-size:1.6rem; font-weight:800; margin-bottom:8px; position:relative;}
+.glowpanel p{color:rgba(255,255,255,.9); font-size:.98rem; max-width:480px; position:relative;}
+.btn-dark{background:#04160c; color:var(--green); position:relative; z-index:1;}
+.btn-dark:hover{transform:translateY(-3px); box-shadow:0 14px 30px rgba(0,0,0,.35);}
+
+/* ── contact ── */
+.contact{display:grid; grid-template-columns:1.2fr 1fr; gap:20px; align-items:start;}
+.form{padding:28px;}
+.form h3{font-size:1.2rem; font-weight:800; margin-bottom:4px;}
+.form .sub{color:var(--muted); font-size:.88rem; margin-bottom:20px;}
+.row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+.field{display:flex; flex-direction:column; gap:6px; margin-bottom:14px;}
+.field label{font-size:12px; font-weight:700; color:var(--muted); font-family:var(--mono); letter-spacing:.03em;}
+.field input,.field select,.field textarea{background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:13px 14px; font-size:16px; transition:border-color .2s; width:100%;}
+.field textarea{min-height:120px; resize:vertical;}
+.field select{appearance:none; background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%); background-position:calc(100% - 20px) 55%,calc(100% - 15px) 55%; background-size:5px 5px; background-repeat:no-repeat;}
+[dir="rtl"] .field select{background-position:20px 55%,15px 55%;}
+.field select option{background:var(--bg-2);}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none; border-color:var(--green);}
+.hp{position:absolute; inset-inline-start:-9999px; width:1px; height:1px; opacity:0;}
+.form .btn{width:100%;}
+.form-status{margin-top:14px; font-size:.9rem; min-height:1.4em;}
+.form-status.ok{color:var(--green);}
+.form-status.err{color:#f47067;}
+.hub{display:flex; flex-direction:column; gap:12px;}
+.hubcard{display:flex; align-items:center; gap:14px; padding:18px 20px;}
+.hubicon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.hubicon.ig{background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af); color:#fff;}
+.hubicon.wa{background:#25D366; color:#04160c;}
+.hubicon.em{background:rgba(227,179,65,.15); color:#e3b341;}
+.hublabel{font-size:11px; color:var(--dim); font-weight:600; text-transform:uppercase; letter-spacing:.05em; font-family:var(--mono);}
+.hubval{font-weight:700; font-size:.92rem; word-break:break-word; direction:ltr; text-align:start;}
+.hubcard .go{margin-inline-start:auto; color:var(--dim); font-size:13px;}
+[dir="rtl"] .hubcard .go{transform:scaleX(-1);}
+.hours{padding:18px 20px; color:var(--muted); font-size:.86rem; display:flex; gap:12px; align-items:flex-start;}
+.hours i{color:var(--green); margin-top:3px;}
+
+/* ── footer ── */
+footer{position:relative; z-index:2; border-top:1px solid var(--line); margin-top:30px;}
+.foot{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; padding:28px 0 36px; color:var(--faint); font-size:13px;}
+.foot .links{display:flex; gap:18px;}
+.foot .links a:hover{color:var(--green);}
+
+/* ── floating WhatsApp (mobile) ── */
+.wa-float{position:fixed; inset-inline-end:16px; bottom:16px; z-index:999; width:56px; height:56px; border-radius:50%; background:#25D366; color:#04160c; display:none; align-items:center; justify-content:center; font-size:28px; box-shadow:0 10px 26px rgba(0,0,0,.45);}
+
+/* ── lightbox ── */
+dialog.lightbox{border:0; padding:0; background:transparent; max-width:min(1440px,96vw); max-height:94vh; margin:auto; overflow:visible;}
+dialog.lightbox::backdrop{background:rgba(2,8,5,.92); backdrop-filter:blur(4px);}
+dialog.lightbox img{max-width:min(1440px,96vw); max-height:88vh; width:auto; height:auto; border-radius:12px; border:1px solid var(--line-green); margin:0 auto;}
+dialog.lightbox .cap{color:var(--muted); font-size:13px; text-align:center; margin-top:10px; font-family:var(--mono);}
+dialog.lightbox .close{position:absolute; top:-14px; inset-inline-end:-14px; width:40px; height:40px; border-radius:50%; border:1px solid var(--line-green); background:var(--bg); color:var(--green); cursor:pointer; font-size:16px;}
+
+/* ── reveal on scroll ── */
+.reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+.reveal.in{opacity:1; transform:none;}
+@media (prefers-reduced-motion: reduce){ .reveal{opacity:1; transform:none; transition:none;} }
+
+/* ── responsive ── */
+@media(max-width:980px){
+  .services{grid-template-columns:1fr 1fr;}
+  .service,.service:nth-child(4),.service:nth-child(5){grid-column:span 1;}
+  .service:nth-child(5){grid-column:span 2;}
+  .steps{grid-template-columns:1fr 1fr;}
+  .product{grid-template-columns:1fr;}
+  .product:nth-child(even) .gallery{order:0;}
+  .gallery,.product:nth-child(even) .gallery{border:0; border-bottom:1px solid var(--line);}
+  .contact{grid-template-columns:1fr;}
+}
+@media(max-width:900px){
+  .navlinks{display:none;}
+  .burger{display:flex;}
+  .wa-float{display:flex;}
+}
+@media(max-width:600px){
+  .wrap{padding:0 16px;}
+  section{padding:56px 0;}
+  .sechead{margin-bottom:32px;}
+  .hero{padding:36px 0 48px; min-height:auto;}
+  .hero p{font-size:1rem;}
+  .actions{flex-direction:column; width:100%; margin-bottom:36px;}
+  .actions .btn{width:100%;}
+  .stats{grid-template-columns:1fr; gap:10px;}
+  .stat{padding:16px 18px;}
+  .services{grid-template-columns:1fr;}
+  .service:nth-child(5){grid-column:span 1;}
+  .service{padding:22px 20px;}
+  .steps{grid-template-columns:1fr;}
+  .gallery{padding:12px;}
+  .pbody{padding:22px 20px 24px;}
+  .pbody h3{font-size:1.25rem;}
+  .features{grid-template-columns:1fr;}
+  .glowpanel{padding:30px 22px;}
+  .glowpanel .btn{width:100%;}
+  .row{grid-template-columns:1fr; gap:0;}
+  .form{padding:22px 18px;}
+  .foot{flex-direction:column; text-align:center;}
+}
+</style>
+</head>
+<body>
+<canvas id="netbg" aria-hidden="true"></canvas>
+<div class="grid-overlay" aria-hidden="true"></div>
+<div class="blob b1" aria-hidden="true"></div><div class="blob b2" aria-hidden="true"></div><div class="blob b3" aria-hidden="true"></div>
+
+<header id="top">
+  <div class="wrap">
+    <nav aria-label="Main">
+      <a href="#top" class="brand" aria-label="NuVision home"><span class="dot"></span> NuVision</a>
+      <div class="navlinks">
+        <a href="#services" data-i18n="nav.services">Services</a>
+        <a href="#work" data-i18n="nav.work">Our Work</a>
+        <a href="#process" data-i18n="nav.process">How We Work</a>
+        <div class="lang-toggle" role="group" aria-label="Language">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="ku" aria-pressed="false">کوردی</button>
+        </div>
+        <a href="#contact" class="nav-cta" data-i18n="nav.contact">Contact Us</a>
+      </div>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobilePanel"><span></span><span></span><span></span></button>
+    </nav>
+  </div>
+</header>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="#services" data-i18n="nav.services">Services</a>
+  <a href="#work" data-i18n="nav.work">Our Work</a>
+  <a href="#process" data-i18n="nav.process">How We Work</a>
+  <a href="#contact" data-i18n="nav.contact">Contact Us</a>
+  <div class="lang-toggle" role="group" aria-label="Language">
+    <button type="button" data-lang="en" aria-pressed="true">EN</button>
+    <button type="button" data-lang="ku" aria-pressed="false">کوردی</button>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow"><i class="fas fa-circle"></i> <span data-i18n="hero.eyebrow">NuVision — your vision, made real</span></div>
+    <h1 data-i18n-html="hero.title">We build the <span>systems</span> your business runs on</h1>
+    <p data-i18n="hero.text">POS systems, QR menus, websites and custom software for shops, restaurants and growing businesses — in Kurdish, Arabic and English.</p>
+    <div class="actions">
+      <a href="https://wa.me/9647508649507" target="_blank" rel="noopener" class="btn btn-fill"><i class="fab fa-whatsapp"></i> <span data-i18n="cta.whatsapp">Message us on WhatsApp</span></a>
+      <a href="#work" class="btn btn-outline"><span data-i18n="cta.work">See our work</span> <i class="fas fa-arrow-down"></i></a>
+    </div>
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span><i class="fas fa-cash-register"></i> POS Systems</span>
+        <span><i class="fas fa-qrcode"></i> QR Menus</span>
+        <span><i class="fab fa-php"></i> PHP</span>
+        <span><i class="fas fa-database"></i> MySQL</span>
+        <span><i class="fab fa-js"></i> JavaScript</span>
+        <span><i class="fab fa-bootstrap"></i> Bootstrap</span>
+        <span><i class="fas fa-language"></i> RTL Ready</span>
+        <span><i class="fas fa-cash-register"></i> POS Systems</span>
+        <span><i class="fas fa-qrcode"></i> QR Menus</span>
+        <span><i class="fab fa-php"></i> PHP</span>
+        <span><i class="fas fa-database"></i> MySQL</span>
+        <span><i class="fab fa-js"></i> JavaScript</span>
+        <span><i class="fab fa-bootstrap"></i> Bootstrap</span>
+        <span><i class="fas fa-language"></i> RTL Ready</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats reveal">
+    <div class="card stat"><b>4</b><span data-i18n="stats.products">complete business systems — from POS to distribution</span></div>
+    <div class="card stat"><b>3</b><span data-i18n="stats.languages">interface languages: Kurdish, Arabic and English (RTL ready)</span></div>
+    <div class="card stat"><b><i class="fas fa-mobile-screen-button"></i></b><span data-i18n="stats.mobile">Mobile-first menus and websites that load fast on any phone</span></div>
+  </div>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="sechead reveal">
+      <span class="kicker" data-i18n="services.kicker">Services</span>
+      <h2 data-i18n="services.title">What we build</h2>
+      <p data-i18n="services.text">Practical software for real businesses — no unnecessary complexity.</p>
+    </div>
+    <div class="services">
+      <div class="card lift service reveal"><div class="ico"><i class="fas fa-cash-register"></i></div><h3 data-i18n="svc.pos.title">POS Systems</h3><p data-i18n="svc.pos.text">Point-of-sale for markets, cafés and wholesalers — barcode scanning, stock, debts and daily reports.</p></div>
+      <div class="card lift service reveal"><div class="ico"><i class="fas fa-qrcode"></i></div><h3 data-i18n="svc.menu.title">QR &amp; Digital Menus</h3><p data-i18n="svc.menu.text">Multilingual menus guests open with one scan. Update prices and dishes in minutes — no reprinting.</p></div>
+      <div class="card lift service reveal"><div class="ico"><i class="fas fa-globe"></i></div><h3 data-i18n="svc.web.title">Business Websites</h3><p data-i18n="svc.web.text">Fast, clean websites built to turn Instagram visitors into real customers.</p></div>
+      <div class="card lift service reveal"><div class="ico"><i class="fas fa-file-lines"></i></div><h3 data-i18n="svc.cv.title">CV Design</h3><p data-i18n="svc.cv.text">Clear, professional CVs and resumes — in English, Kurdish or Arabic — that actually get read.</p></div>
+      <div class="card lift service reveal"><div class="ico"><i class="fas fa-gears"></i></div><h3 data-i18n="svc.custom.title">Custom Systems</h3><p data-i18n="svc.custom.text">Inventory, distribution, HR or anything your workflow needs — built around how your business actually works.</p></div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="sechead reveal">
+      <span class="kicker" data-i18n="work.kicker">Our Work</span>
+      <h2 data-i18n="work.title">Systems we've built</h2>
+      <p data-i18n="work.text">Real products, real screens. Tap a screenshot to see it full size.</p>
+    </div>
+
+    <div class="products">
+
+      <!-- SalesOS -->
+      <article class="card product reveal">
+        <div class="gallery">
+          <div class="stage" data-url="salesos / dashboard">
+            <div class="topbar"><span></span><span></span><span></span><div class="url">salesos / dashboard</div></div>
+            <div class="view"><img loading="lazy" decoding="async" width="1440" height="900" alt="SalesOS dashboard in Arabic showing today's sales, monthly profit and stock alerts"
+              src="assets/projects/salesos-dashboard-desktop-sm.webp" srcset="assets/projects/salesos-dashboard-desktop-sm.webp 720w, assets/projects/salesos-dashboard-desktop.webp 1440w" sizes="(max-width:980px) 100vw, 620px"></div>
+            <span class="zoom" aria-hidden="true"><i class="fas fa-expand"></i></span>
+          </div>
+          <div class="thumbs" role="group" aria-label="SalesOS screens">
+            <button class="thumb" aria-pressed="true" data-shot="salesos-dashboard" data-url="salesos / dashboard" data-alt="SalesOS dashboard in Arabic showing today's sales, monthly profit and stock alerts"><i class="fas fa-gauge"></i> <span data-i18n="shot.dashboard">Dashboard</span></button>
+            <button class="thumb" aria-pressed="false" data-shot="salesos-pos" data-url="salesos / sales / new" data-alt="SalesOS point-of-sale screen with barcode scanner input and a cart of products"><i class="fas fa-barcode"></i> <span data-i18n="shot.pos">Point of Sale</span></button>
+            <button class="thumb" aria-pressed="false" data-shot="salesos-report" data-url="salesos / reports / sales" data-alt="SalesOS sales report with daily revenue chart"><i class="fas fa-chart-line"></i> <span data-i18n="shot.reports">Reports</span></button>
+            <button class="thumb" aria-pressed="false" data-shot="salesos-products" data-url="salesos / products" data-alt="SalesOS product list with barcodes, prices and stock levels"><i class="fas fa-boxes-stacked"></i> <span data-i18n="shot.products">Products</span></button>
+          </div>
+        </div>
+        <div class="pbody">
+          <div class="ptype" data-i18n="p.salesos.type">Sales · Inventory · Finance</div>
+          <h3>SalesOS</h3>
+          <p data-i18n="p.salesos.text">A complete back office for shops and wholesalers: barcode-ready checkout, stock with expiry tracking, purchases and suppliers, customer debts, and real profit reports — fully in Arabic.</p>
+          <ul class="features">
+            <li><i class="fas fa-check"></i><span data-i18n="p.salesos.f1">Barcode POS with live stock check</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.salesos.f2">Low-stock and expiry alerts</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.salesos.f3">Debts, payments and expenses</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.salesos.f4">Profit &amp; loss reports with charts</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.salesos.f5">Returns and printable invoices</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.salesos.f6">User roles and full audit log</span></li>
+          </ul>
+          <div class="tags"><span>PHP</span><span>MySQL</span><span>Bootstrap 5</span><span>Chart.js</span><span>RTL</span></div>
+        </div>
+      </article>
+
+      <!-- Distribution Management System -->
+      <article class="card product reveal">
+        <div class="gallery">
+          <div class="stage" data-url="distribution / dashboard">
+            <div class="topbar"><span></span><span></span><span></span><div class="url">distribution / dashboard</div></div>
+            <div class="view"><img loading="lazy" decoding="async" width="1440" height="900" alt="Distribution Management System dashboard with revenue, pending approvals and recent orders"
+              src="assets/projects/distribution-dashboard-desktop-sm.webp" srcset="assets/projects/distribution-dashboard-desktop-sm.webp 720w, assets/projects/distribution-dashboard-desktop.webp 1440w" sizes="(max-width:980px) 100vw, 620px"></div>
+            <span class="zoom" aria-hidden="true"><i class="fas fa-expand"></i></span>
+          </div>
+          <div class="thumbs" role="group" aria-label="Distribution Management System screens">
+            <button class="thumb" aria-pressed="true" data-shot="distribution-dashboard" data-url="distribution / dashboard" data-alt="Distribution Management System dashboard with revenue, pending approvals and recent orders"><i class="fas fa-gauge"></i> <span data-i18n="shot.dashboard">Dashboard</span></button>
+            <button class="thumb" aria-pressed="false" data-shot="distribution-report" data-url="distribution / reports" data-alt="Distribution Management System monthly report with revenue, expenses and daily sales chart"><i class="fas fa-chart-column"></i> <span data-i18n="shot.reports">Reports</span></button>
+            <button class="thumb" aria-pressed="false" data-shot="distribution-stock" data-url="distribution / stock" data-alt="Distribution Management System stock screen with low-stock alerts and inventory movements"><i class="fas fa-warehouse"></i> <span data-i18n="shot.stock">Stock</span></button>
+          </div>
+        </div>
+        <div class="pbody">
+          <div class="ptype" data-i18n="p.dms.type">Admin · Sales Rep · Driver</div>
+          <h3 data-i18n="p.dms.name">Distribution Management System</h3>
+          <p data-i18n="p.dms.text">Built for distribution companies: sales reps place orders in the field, admins approve them, and drivers receive deliveries — with stock, debts, salaries and reports in one place.</p>
+          <ul class="features">
+            <li><i class="fas fa-check"></i><span data-i18n="p.dms.f1">Rep orders with approval workflow</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.dms.f2">Driver assignment and delivery tracking</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.dms.f3">Stock levels and restock alerts</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.dms.f4">Customer debts and collections</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.dms.f5">Salaries, expenses and reports</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.dms.f6">Automatic database backups</span></li>
+          </ul>
+          <div class="tags"><span>PHP</span><span>MySQL</span><span>JavaScript</span><span>Role-based</span></div>
+        </div>
+      </article>
+
+      <!-- Royal Grill -->
+      <article class="card product reveal">
+        <div class="gallery">
+          <div class="stage" data-url="royal-grill / menu?lang=en">
+            <div class="topbar"><span></span><span></span><span></span><div class="url">royal-grill / menu?lang=en</div></div>
+            <div class="view"><img loading="lazy" decoding="async" width="1440" height="900" alt="Royal Grill digital menu in English with category filters and dish photos"
+              src="assets/projects/royal-grill-menu-desktop-sm.webp" srcset="assets/projects/royal-grill-menu-desktop-sm.webp 720w, assets/projects/royal-grill-menu-desktop.webp 1440w" sizes="(max-width:980px) 100vw, 620px"></div>
+            <span class="zoom" aria-hidden="true"><i class="fas fa-expand"></i></span>
+          </div>
+          <div class="thumbs" role="group" aria-label="Royal Grill screens">
+            <button class="thumb" aria-pressed="true" data-shot="royal-grill-menu" data-url="royal-grill / menu?lang=en" data-alt="Royal Grill digital menu in English with category filters and dish photos"><i class="fas fa-language"></i> <span data-i18n="shot.english">English</span></button>
+            <button class="thumb" aria-pressed="false" data-shot="royal-grill-menu-ku" data-url="royal-grill / menu?lang=ku" data-alt="Royal Grill digital menu in Kurdish, right-to-left layout"><i class="fas fa-language"></i> <span data-i18n="shot.kurdish">Kurdish</span></button>
+          </div>
+        </div>
+        <div class="pbody">
+          <div class="ptype" data-i18n="p.royal.type">QR Digital Menu</div>
+          <h3>Royal Grill</h3>
+          <p data-i18n="p.royal.text">A multilingual QR menu: guests scan, choose English, Arabic or Kurdish, and browse dishes with photos, ingredients and allergens. The restaurant updates everything from its own admin panel.</p>
+          <ul class="features">
+            <li><i class="fas fa-check"></i><span data-i18n="p.royal.f1">English, Arabic and Kurdish (RTL)</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.royal.f2">Categories, search and best-seller tags</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.royal.f3">Ingredients and allergen info</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.royal.f4">Admin panel with photo uploads</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.royal.f5">Made for phones — opens instantly from a QR scan</span></li>
+          </ul>
+          <div class="tags"><span>PHP</span><span>MySQL</span><span>Mobile-first</span><span>i18n</span></div>
+        </div>
+      </article>
+
+      <!-- Café POS -->
+      <article class="card product reveal">
+        <div class="gallery">
+          <div class="stage" data-url="cafe-pos / new order">
+            <div class="topbar"><span></span><span></span><span></span><div class="url">cafe-pos / new order</div></div>
+            <div class="view"><img loading="lazy" decoding="async" width="1440" height="900" alt="Café POS cashier screen with menu items and an order in the cart"
+              src="assets/projects/cafe-pos-pos-desktop-sm.webp" srcset="assets/projects/cafe-pos-pos-desktop-sm.webp 720w, assets/projects/cafe-pos-pos-desktop.webp 1440w" sizes="(max-width:980px) 100vw, 620px"></div>
+            <span class="zoom" aria-hidden="true"><i class="fas fa-expand"></i></span>
+          </div>
+          <div class="thumbs" role="group" aria-label="Café POS screens">
+            <button class="thumb" aria-pressed="true" data-shot="cafe-pos-pos" data-url="cafe-pos / new order" data-alt="Café POS cashier screen with menu items and an order in the cart"><i class="fas fa-cash-register"></i> <span data-i18n="shot.cashier">Cashier</span></button>
+            <button class="thumb" aria-pressed="false" data-shot="cafe-pos-dashboard" data-url="cafe-pos / dashboard" data-alt="Café POS manager dashboard with today's revenue, profit, expenses and alerts"><i class="fas fa-gauge"></i> <span data-i18n="shot.dashboard">Dashboard</span></button>
+            <button class="thumb" aria-pressed="false" data-shot="cafe-pos-sales" data-url="cafe-pos / all sales" data-alt="Café POS sales history with invoices, cashiers and payment methods"><i class="fas fa-receipt"></i> <span data-i18n="shot.sales">Sales</span></button>
+          </div>
+        </div>
+        <div class="pbody">
+          <div class="ptype" data-i18n="p.cafe.type">Café Point of Sale</div>
+          <h3>Café POS</h3>
+          <p data-i18n="p.cafe.text">A fast cashier screen built for busy cafés, with a separate manager view for menu items, inventory, daily sales, expenses and reports.</p>
+          <ul class="features">
+            <li><i class="fas fa-check"></i><span data-i18n="p.cafe.f1">Cashier and manager roles</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.cafe.f2">Quick orders and printed receipts</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.cafe.f3">Cashier shifts and daily totals</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.cafe.f4">Inventory, debts and expenses</span></li>
+            <li><i class="fas fa-check"></i><span data-i18n="p.cafe.f5">Works on phones, tablets and desktops</span></li>
+          </ul>
+          <div class="tags"><span>PHP</span><span>MySQL</span><span>JavaScript</span></div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- More projects (no screenshots) -->
+    <div class="more reveal">
+      <h3 data-i18n="more.title">More we've built</h3>
+      <p data-i18n="more.text">Over four years of college we've also built projects across games, desktop apps and websites, including:</p>
+      <div class="more-grid">
+        <div class="card mini"><div class="ico"><i class="fas fa-chess-knight"></i></div><div><h4 data-i18n="more.chess.title">Chess Game</h4><p data-i18n="more.chess.text">A playable chess application built with Unity.</p><div class="tags"><span>Unity</span><span>C#</span></div></div></div>
+        <div class="card mini"><div class="ico"><i class="fas fa-book"></i></div><div><h4 data-i18n="more.library.title">Library Borrowing System</h4><p data-i18n="more.library.text">Lets students borrow and return books from the college library, with records of who has what.</p><div class="tags"><span>Visual Basic</span></div></div></div>
+        <div class="card mini"><div class="ico"><i class="fas fa-bullhorn"></i></div><div><h4 data-i18n="more.ads.title">Tesla Promo Website (Concept)</h4><p data-i18n="more.ads.text">A demo advertising website for Tesla, built as a concept project.</p><div class="tags"><span>PHP</span><span>HTML</span><span>CSS</span></div></div></div>
+        <div class="card mini"><div class="ico"><i class="fas fa-ellipsis"></i></div><div><h4 data-i18n="more.others.title">And more</h4><p data-i18n="more.others.text">Other college and side projects that taught us to build, test and ship real software.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="sechead reveal">
+      <span class="kicker" data-i18n="process.kicker">How We Work</span>
+      <h2 data-i18n="process.title">From first message to launch</h2>
+      <p data-i18n="process.text">A simple process, with you involved at every step.</p>
+    </div>
+    <div class="steps">
+      <div class="card step reveal"><h3 data-i18n="step1.title">Talk</h3><p data-i18n="step1.text">Tell us about your business on WhatsApp or through the form. We ask the right questions.</p></div>
+      <div class="card step reveal"><h3 data-i18n="step2.title">Plan &amp; design</h3><p data-i18n="step2.text">We map out the screens and workflow, and show you a preview before we start building.</p></div>
+      <div class="card step reveal"><h3 data-i18n="step3.title">Build &amp; test</h3><p data-i18n="step3.text">We build it, test it with realistic data, and show your team how to use it.</p></div>
+      <div class="card step reveal"><h3 data-i18n="step4.title">Launch &amp; support</h3><p data-i18n="step4.text">We set everything up, hand it over, and stay available for fixes and updates.</p></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section>
+    <div class="glowpanel reveal">
+      <div>
+        <h3 data-i18n="panel.title">Have an idea? Let's build it together.</h3>
+        <p data-i18n="panel.text">Message us on WhatsApp — we usually reply within a few hours.</p>
+      </div>
+      <a href="https://wa.me/9647508649507" target="_blank" rel="noopener" class="btn btn-dark"><i class="fab fa-whatsapp"></i> <span data-i18n="cta.chat">Start a chat</span></a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="sechead reveal">
+      <span class="kicker" data-i18n="contact.kicker">Contact</span>
+      <h2 data-i18n="contact.title">Tell us what you need</h2>
+      <p data-i18n="contact.text">Send a message and we'll get back to you — or reach us directly on WhatsApp, Instagram or email.</p>
+    </div>
+    <div class="contact">
+      <form class="card form reveal" id="contactForm" novalidate>
+        <h3 data-i18n="form.title">Send us a message</h3>
+        <p class="sub" data-i18n="form.sub">We reply on WhatsApp or by email.</p>
+        <div class="row">
+          <div class="field">
+            <label for="f-name" data-i18n="form.name">Your name</label>
+            <input id="f-name" name="name" type="text" dir="auto" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="f-contact" data-i18n="form.contact">WhatsApp number or email</label>
+            <input id="f-contact" name="contact" type="text" dir="ltr" autocomplete="tel" inputmode="email" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-service" data-i18n="form.service">What do you need?</label>
+          <select id="f-service" name="service">
+            <option value="POS System" data-i18n="svc.pos.title">POS System</option>
+            <option value="QR / Digital Menu" data-i18n="svc.menu.title">QR &amp; Digital Menu</option>
+            <option value="Business Website" data-i18n="svc.web.title">Business Website</option>
+            <option value="CV Design" data-i18n="svc.cv.title">CV Design</option>
+            <option value="Custom System" data-i18n="svc.custom.title">Custom System</option>
+            <option value="Other" data-i18n="form.other">Something else</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-message" data-i18n="form.message">Message</label>
+          <textarea id="f-message" name="message" dir="auto" required data-i18n-placeholder="form.placeholder" placeholder="Tell us a little about your business and what you'd like to build…"></textarea>
+        </div>
+        <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn btn-fill"><i class="fas fa-paper-plane"></i> <span data-i18n="form.send">Send message</span></button>
+        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="hub">
+        <a href="https://wa.me/9647508649507" target="_blank" rel="noopener" class="card lift hubcard reveal"><div class="hubicon wa"><i class="fab fa-whatsapp"></i></div><div><div class="hublabel">WhatsApp</div><div class="hubval">+964 750 864 9507</div></div><i class="fas fa-arrow-right go"></i></a>
+        <a href="https://wa.me/9647508672138" target="_blank" rel="noopener" class="card lift hubcard reveal"><div class="hubicon wa"><i class="fab fa-whatsapp"></i></div><div><div class="hublabel">WhatsApp</div><div class="hubval">+964 750 867 2138</div></div><i class="fas fa-arrow-right go"></i></a>
+        <a href="https://www.instagram.com/nuvision.tech?rpxt=ajBtNTM3MDd3NTM1" target="_blank" rel="noopener" class="card lift hubcard reveal"><div class="hubicon ig"><i class="fab fa-instagram"></i></div><div><div class="hublabel">Instagram</div><div class="hubval">@nuvision.tech</div></div><i class="fas fa-arrow-right go"></i></a>
+        <a href="mailto:teamnuvisionbusiness@gmail.com" class="card lift hubcard reveal"><div class="hubicon em"><i class="fas fa-envelope"></i></div><div><div class="hublabel" data-i18n="contact.email">Email</div><div class="hubval">teamnuvisionbusiness@gmail.com</div></div><i class="fas fa-arrow-right go"></i></a>
+        <div class="card hours reveal"><i class="fas fa-location-dot"></i><span data-i18n="contact.where">Based in Kurdistan Region, Iraq — working with businesses in person and online.</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="brand" style="font-size:15px;"><span class="dot"></span> NuVision</div>
+    <div>© <span id="year">2026</span> NuVision · <span data-i18n="footer.tag">Your vision, made real.</span></div>
+    <div class="links">
+      <a href="https://www.instagram.com/nuvision.tech?rpxt=ajBtNTM3MDd3NTM1" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://wa.me/9647508649507" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      <a href="mailto:teamnuvisionbusiness@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/9647508649507" target="_blank" rel="noopener" class="wa-float" aria-label="Message us on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+
+<dialog class="lightbox" id="lightbox" aria-label="Screenshot preview">
+  <button class="close" id="lbClose" aria-label="Close"><i class="fas fa-xmark"></i></button>
+  <img id="lbImg" alt="">
+  <div class="cap" id="lbCap"></div>
+</dialog>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+//  SETTINGS
+// ─────────────────────────────────────────────────────────────
+// Formspree endpoint, e.g. 'https://formspree.io/f/abcdwxyz'.
+// While empty, the form opens WhatsApp with the message pre-filled instead.
+const FORM_ENDPOINT = '';
+const WHATSAPP_NUMBER = '9647508649507';
+
+// ─────────────────────────────────────────────────────────────
+//  TRANSLATIONS
+//  English lives in the HTML. To add Kurdish (Badini), fill in the
+//  strings below — any key left empty falls back to English.
+//  The language switch appears automatically once a string is filled in.
+// ─────────────────────────────────────────────────────────────
+const I18N = {
+  ku: {
+    'nav.services': '', 'nav.work': '', 'nav.process': '', 'nav.contact': '',
+    'hero.eyebrow': '', 'hero.title': '', 'hero.text': '',
+    'cta.whatsapp': '', 'cta.work': '', 'cta.chat': '',
+    'stats.products': '', 'stats.languages': '', 'stats.mobile': '',
+    'services.kicker': '', 'services.title': '', 'services.text': '',
+    'svc.pos.title': '', 'svc.pos.text': '', 'svc.menu.title': '', 'svc.menu.text': '',
+    'svc.web.title': '', 'svc.web.text': '', 'svc.cv.title': '', 'svc.cv.text': '',
+    'svc.custom.title': '', 'svc.custom.text': '',
+    'work.kicker': '', 'work.title': '', 'work.text': '',
+    'shot.dashboard': '', 'shot.pos': '', 'shot.reports': '', 'shot.products': '', 'shot.stock': '',
+    'shot.kurdish': '', 'shot.english': '', 'shot.cashier': '', 'shot.sales': '',
+    'p.salesos.type': '', 'p.salesos.text': '',
+    'p.salesos.f1': '', 'p.salesos.f2': '', 'p.salesos.f3': '', 'p.salesos.f4': '', 'p.salesos.f5': '', 'p.salesos.f6': '',
+    'p.dms.type': '', 'p.dms.name': '', 'p.dms.text': '',
+    'p.dms.f1': '', 'p.dms.f2': '', 'p.dms.f3': '', 'p.dms.f4': '', 'p.dms.f5': '', 'p.dms.f6': '',
+    'p.royal.type': '', 'p.royal.text': '', 'p.royal.f1': '', 'p.royal.f2': '', 'p.royal.f3': '', 'p.royal.f4': '', 'p.royal.f5': '',
+    'p.cafe.type': '', 'p.cafe.text': '', 'p.cafe.f1': '', 'p.cafe.f2': '', 'p.cafe.f3': '', 'p.cafe.f4': '', 'p.cafe.f5': '',
+    'more.title': '', 'more.text': '',
+    'more.chess.title': '', 'more.chess.text': '', 'more.library.title': '', 'more.library.text': '',
+    'more.ads.title': '', 'more.ads.text': '', 'more.others.title': '', 'more.others.text': '',
+    'process.kicker': '', 'process.title': '', 'process.text': '',
+    'step1.title': '', 'step1.text': '', 'step2.title': '', 'step2.text': '',
+    'step3.title': '', 'step3.text': '', 'step4.title': '', 'step4.text': '',
+    'panel.title': '', 'panel.text': '',
+    'contact.kicker': '', 'contact.title': '', 'contact.text': '', 'contact.email': '', 'contact.where': '',
+    'form.title': '', 'form.sub': '', 'form.name': '', 'form.contact': '', 'form.service': '', 'form.other': '',
+    'form.message': '', 'form.placeholder': '', 'form.send': '',
+    'form.sending': '', 'form.ok': '', 'form.err': '', 'form.missing': '',
+    'footer.tag': '',
+  },
+};
+const RTL_LANGS = ['ku'];
+const MESSAGES = { // English strings used only from JS
+  'form.sending': 'Sending…',
+  'form.ok': "Thanks! Your message was sent — we'll get back to you soon.",
+  'form.err': 'Something went wrong. Please message us on WhatsApp instead.',
+  'form.missing': 'Please fill in your name, contact and message.',
+};
+
+const english = new Map();
+document.querySelectorAll('[data-i18n],[data-i18n-html],[data-i18n-placeholder]').forEach(el => {
+  english.set(el, { text: el.textContent, html: el.innerHTML, ph: el.getAttribute('placeholder') });
+});
+let currentLang = 'en';
+function t(key){ const d = I18N[currentLang]; return (d && d[key]) || MESSAGES[key] || ''; }
+
+function setLang(lang){
+  const dict = I18N[lang] || {};
+  currentLang = I18N[lang] ? lang : 'en';
+  english.forEach((orig, el) => {
+    if (el.dataset.i18n) el.textContent = dict[el.dataset.i18n] || orig.text;
+    if (el.dataset.i18nHtml) el.innerHTML = dict[el.dataset.i18nHtml] || orig.html;
+    if (el.dataset.i18nPlaceholder) el.setAttribute('placeholder', dict[el.dataset.i18nPlaceholder] || orig.ph);
+  });
+  const rtl = RTL_LANGS.includes(currentLang);
+  document.documentElement.lang = currentLang === 'ku' ? 'ku' : 'en';
+  document.documentElement.dir = rtl ? 'rtl' : 'ltr';
+  document.documentElement.classList.toggle('lang-ku', currentLang === 'ku');
+  if (currentLang === 'ku' && !document.getElementById('font-ku')) {
+    const l = document.createElement('link');
+    l.id = 'font-ku'; l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700;800&display=swap';
+    document.head.appendChild(l);
+  }
+  document.querySelectorAll('.lang-toggle button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === currentLang)));
+  try { localStorage.setItem('nv-lang', currentLang); } catch (e) {}
+}
+const hasKurdish = Object.values(I18N.ku).some(Boolean);
+if (hasKurdish) {
+  document.querySelectorAll('.lang-toggle').forEach(g => g.classList.add('ready'));
+  document.querySelectorAll('.lang-toggle button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+  let saved = null;
+  try { saved = localStorage.getItem('nv-lang'); } catch (e) {}
+  if (saved && saved !== 'en') setLang(saved);
+}
+
+// ─────────────────────────────────────────────────────────────
+//  NAV
+// ─────────────────────────────────────────────────────────────
+const burger = document.getElementById('burger');
+const panel = document.getElementById('mobilePanel');
+function closeMenu(){ burger.classList.remove('open'); panel.classList.remove('open'); burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+burger.addEventListener('click', () => {
+  const open = !panel.classList.contains('open');
+  burger.classList.toggle('open', open); panel.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', String(open));
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+panel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+const header = document.querySelector('header');
+addEventListener('scroll', () => header.classList.toggle('scrolled', scrollY > 10), { passive:true });
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// ─────────────────────────────────────────────────────────────
+//  PROJECT GALLERIES + LIGHTBOX
+// ─────────────────────────────────────────────────────────────
+const SHOTS = 'assets/projects/';
+function showShot(stage, btn){
+  const mobile = btn.dataset.kind === 'mobile';
+  const img = stage.querySelector('.view img');
+  stage.classList.toggle('is-mobile', mobile);
+  stage.querySelector('.url').textContent = btn.dataset.url;
+  img.alt = btn.dataset.alt;
+  if (mobile) {
+    img.removeAttribute('srcset'); img.removeAttribute('sizes');
+    img.width = 780; img.height = 1688;
+    img.src = SHOTS + btn.dataset.shot + '-mobile.webp';
+  } else {
+    img.width = 1440; img.height = 900;
+    img.sizes = '(max-width:980px) 100vw, 620px';
+    img.srcset = `${SHOTS}${btn.dataset.shot}-desktop-sm.webp 720w, ${SHOTS}${btn.dataset.shot}-desktop.webp 1440w`;
+    img.src = SHOTS + btn.dataset.shot + '-desktop-sm.webp';
+  }
+  stage.dataset.full = SHOTS + btn.dataset.shot + (mobile ? '-mobile.webp' : '-desktop.webp');
+}
+document.querySelectorAll('.gallery').forEach(g => {
+  const stage = g.querySelector('.stage');
+  const btns = g.querySelectorAll('.thumb');
+  if (btns[0]) showShot(stage, btns[0]);
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    showShot(stage, b);
+  }));
+});
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImg');
+document.querySelectorAll('.stage:not(.empty)').forEach(stage => {
+  stage.setAttribute('role', 'button'); stage.tabIndex = 0;
+  stage.setAttribute('aria-label', 'View full size');
+  const open = () => {
+    const img = stage.querySelector('.view img');
+    lbImg.src = stage.dataset.full; lbImg.alt = img.alt;
+    document.getElementById('lbCap').textContent = img.alt;
+    if (lb.showModal) lb.showModal(); else window.open(stage.dataset.full, '_blank');
+  };
+  stage.addEventListener('click', open);
+  stage.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+});
+document.getElementById('lbClose').addEventListener('click', () => lb.close());
+lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+
+// ─────────────────────────────────────────────────────────────
+//  CONTACT FORM
+// ─────────────────────────────────────────────────────────────
+const form = document.getElementById('contactForm');
+const statusEl = document.getElementById('formStatus');
+function setStatus(msg, cls){ statusEl.textContent = msg; statusEl.className = 'form-status ' + (cls || ''); }
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const data = new FormData(form);
+  if (data.get('_gotcha')) return; // bot
+  const name = (data.get('name') || '').trim(), contact = (data.get('contact') || '').trim(), message = (data.get('message') || '').trim();
+  if (!name || !contact || !message) { setStatus(t('form.missing'), 'err'); return; }
+
+  if (!FORM_ENDPOINT) {
+    setStatus('');
+    const text = `Hi NuVision! I'm ${name} (${contact}).\nService: ${data.get('service')}\n\n${message}`;
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+    return;
+  }
+  const btn = form.querySelector('button[type=submit]');
+  btn.disabled = true; setStatus(t('form.sending'));
+  try {
+    const res = await fetch(FORM_ENDPOINT, { method:'POST', body:data, headers:{ Accept:'application/json' } });
+    if (!res.ok) throw new Error(res.status);
+    form.reset(); setStatus(t('form.ok'), 'ok');
+  } catch (err) {
+    setStatus(t('form.err'), 'err');
+  } finally { btn.disabled = false; }
+});
+
+// ─────────────────────────────────────────────────────────────
+//  REVEAL ON SCROLL
+// ─────────────────────────────────────────────────────────────
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(entries => entries.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+  }), { rootMargin:'0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+} else {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+}
+
+// ─────────────────────────────────────────────────────────────
+//  ANIMATED NODE NETWORK BACKGROUND
+// ─────────────────────────────────────────────────────────────
+const canvas = document.getElementById('netbg');
+const ctx = canvas.getContext('2d');
+let w, h, nodes, running = true;
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function resize(){
+  w = canvas.width = innerWidth;
+  h = canvas.height = innerHeight;
+  const count = Math.min(70, Math.floor((w*h)/22000));
+  nodes = Array.from({length:count}, () => ({
+    x:Math.random()*w, y:Math.random()*h,
+    vx:(Math.random()-0.5)*0.35, vy:(Math.random()-0.5)*0.35
+  }));
+}
+addEventListener('resize', resize);
+resize();
+
+function tick(){
+  ctx.clearRect(0,0,w,h);
+  for (const n of nodes){
+    n.x += n.vx; n.y += n.vy;
+    if (n.x<0||n.x>w) n.vx*=-1;
+    if (n.y<0||n.y>h) n.vy*=-1;
+  }
+  for (let i=0;i<nodes.length;i++){
+    for (let j=i+1;j<nodes.length;j++){
+      const a=nodes[i], b=nodes[j];
+      const dx=a.x-b.x, dy=a.y-b.y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if (dist<140){
+        ctx.strokeStyle = `rgba(63,213,130,${0.16*(1-dist/140)})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+      }
+    }
+  }
+  for (const n of nodes){
+    ctx.fillStyle = 'rgba(63,213,130,0.75)';
+    ctx.beginPath(); ctx.arc(n.x,n.y,1.6,0,Math.PI*2); ctx.fill();
+  }
+  if (!reduced && running) requestAnimationFrame(tick);
+}
+// pause the animation while the tab is hidden (saves battery on phones)
+document.addEventListener('visibilitychange', () => {
+  const wasRunning = running;
+  running = !document.hidden;
+  if (running && !wasRunning && !reduced) requestAnimationFrame(tick);
+});
+tick();
+</script>
+</body>
+</html>
